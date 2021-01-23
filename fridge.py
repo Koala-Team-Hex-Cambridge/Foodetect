@@ -11,10 +11,11 @@ import pandas as pd
 from re import search
 from recipe_scrapers import scrape_me
 import random
+from quantulum3 import parser
 
 
 data = pd.read_csv("RAW_recipes.csv",converters={'ingredients': eval, 'tags': eval, 'steps': eval, 'nutrition': eval})
-ingr = data.iloc[:,10]
+ingr = data['ingredients']
 #%%
 fridge = []
 def Fridge():
@@ -30,9 +31,7 @@ def Recipes(a = []):
                 if search(k,g):
                     com.append(k)
         if len(com)==len(ingr[i]) and len(com) != 0:
-            ID.append(data.iloc[:,1][i])
-            print('F',com)
-            print('R',ingr[i])
+            ID.append(data["id"][i])
         com = []
     return ID
     
@@ -71,4 +70,11 @@ choice = int(input("Pick your choice:"))
 
 recipe = recipe_in_detail(choice, recipe_names)
 
+def recipe_measurements(recipe):
+    ingr_list = recipe.ingredients()
+    for each in ingr_list:
+        measurement = parser.parse(each)
+        for k in Fridge():
+            if search(k, each):
+                print("Needs",measurement[0].value, measurement[0].unit, "of", k)
 
