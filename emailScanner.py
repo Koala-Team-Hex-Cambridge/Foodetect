@@ -9,8 +9,9 @@ def clean(text):
     # clean text for creating a folder
     return "".join(c if c.isalnum() else "_" for c in text)
 
-def emailScanner(email, emailProvider, password)
-    # linking provider to imap 
+
+def emailFinder(email, emailProvider, password):
+    # linking provider to imap
     addressDictonary = {
         "gmail": "imap.gmail.com",
         "outlook": "imap-mail.outlook.com",
@@ -18,7 +19,6 @@ def emailScanner(email, emailProvider, password)
         "yahoo": "imap.mail.yahoo.co.uk",
         "verizon": "incoming.verizon.net",
     }
-
 
     imap_url = addressDictonary[str(emailProvider)]
 
@@ -28,13 +28,11 @@ def emailScanner(email, emailProvider, password)
     # authenticate
     imap.login(email, password)
 
-
     status, messages = imap.select("INBOX")
     # number of top emails to fetch
     N = 1
     # total number of emails
     messages = int(messages[0])
-
 
     # getting the email
     for i in range(messages, messages - N, -1):
@@ -83,7 +81,9 @@ def emailScanner(email, emailProvider, password)
                                     os.mkdir(folder_name)
                                 filepath = os.path.join(folder_name, filename)
                                 # download attachment and save it
-                                open(filepath, "wb").write(part.get_payload(decode=True))
+                                open(filepath, "wb").write(
+                                    part.get_payload(decode=True)
+                                )
                 else:
                     # extract content type of email
                     content_type = msg.get_content_type()
