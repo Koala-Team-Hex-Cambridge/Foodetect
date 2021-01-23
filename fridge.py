@@ -13,55 +13,89 @@ from recipe_scrapers import scrape_me
 import random
 
 
-data = pd.read_csv("RAW_recipes.csv",converters={'ingredients': eval, 'tags': eval, 'steps': eval, 'nutrition': eval})
-ingr = data.iloc[:,10]
+data = pd.read_csv(
+    "RAW_recipes.csv",
+    converters={"ingredients": eval, "tags": eval, "steps": eval, "nutrition": eval},
+)
+ingr = data.iloc[:, 10]
 #%%
 fridge = []
+
+
 def Fridge():
     return fridge
 
-def Recipes(a = []):
-    '''Search for recipes that use products from the fridge'''
+
+def Recipes(a=[]):
+    """Search for recipes that use products from the fridge"""
     ID = []
     com = []
     for i in range(len(ingr)):
         for k in a:
             for g in ingr[i]:
-                if search(k,g):
+                if search(k, g):
                     com.append(k)
-        if len(com)==len(ingr[i]) and len(com) != 0:
-            ID.append(data.iloc[:,1][i])
-            print('F',com)
-            print('R',ingr[i])
+        if len(com) == len(ingr[i]) and len(com) != 0:
+            ID.append(data.iloc[:, 1][i])
+            print("F", com)
+            print("R", ingr[i])
         com = []
     return ID
-    
-def Remove(a = []):
-    '''Remove used objects from the fridge'''
-    res = list(set(a)^set(Fridge()))
+
+
+def Remove(a=[]):
+    """Remove used objects from the fridge"""
+    res = list(set(a) ^ set(Fridge()))
     return res
-    
-def Add(a = []):
-    '''Add objects to the fridge'''
+
+
+def Add(a=[]):
+    """Add objects to the fridge"""
     fridge = Fridge().extend(a)
     return fridge
 
+
 def relevant_recipe_names(ID):
-    '''Finds the names of 5 random recipes that have been identified'''
-    recipe_names = np.empty((0,2))
+    """Finds the names of 5 random recipes that have been identified"""
+    recipe_names = np.empty((0, 2))
     ID_list = random.sample(ID, min(len(ID), 5))
     for x in ID_list:
         scraper = scrape_me("https://www.food.com/" + str(x))
-        recipe_names = np.append(recipe_names, np.array([[scraper.title(), x]]), axis = 0)
+        recipe_names = np.append(recipe_names, np.array([[scraper.title(), x]]), axis=0)
     return recipe_names
-        
+
+
 def recipe_in_detail(choice, recipe_names):
-    '''Work in progress - returns the recipe of choice in more detail'''
+    """Work in progress - returns the recipe of choice in more detail"""
     scraper = scrape_me("https://www.food.com/" + str(recipe_names[choice, 1]))
     return scraper
 
-Add(['eggs', 'bacon', 'feta', 'milk', 'oil', 'onion', 'sugar', 'ground beef', 'salt', 'butter'])
-Add(['apples', 'bananas', 'pepper', 'marshmallows', 'rice krispies', 'white rice', 'beef gravy'])
+
+Add(
+    [
+        "eggs",
+        "bacon",
+        "feta",
+        "milk",
+        "oil",
+        "onion",
+        "sugar",
+        "ground beef",
+        "salt",
+        "butter",
+    ]
+)
+Add(
+    [
+        "apples",
+        "bananas",
+        "pepper",
+        "marshmallows",
+        "rice krispies",
+        "white rice",
+        "beef gravy",
+    ]
+)
 ID = Recipes(Fridge())
 recipe_names = relevant_recipe_names(ID)
 for number, name in enumerate(recipe_names[:, 0]):
@@ -70,5 +104,3 @@ for number, name in enumerate(recipe_names[:, 0]):
 choice = int(input("Pick your choice:"))
 
 recipe = recipe_in_detail(choice, recipe_names)
-
-
