@@ -11,13 +11,19 @@ import pandas as pd
 from re import search
 from recipe_scrapers import scrape_me
 import random
+from quantulum3 import parser
 
 
+<<<<<<< HEAD
 data = pd.read_csv(
     "RAW_recipes.csv",
     converters={"ingredients": eval, "tags": eval, "steps": eval, "nutrition": eval},
 )
 ingr = data.iloc[:, 10]
+=======
+data = pd.read_csv("RAW_recipes.csv",converters={'ingredients': eval, 'tags': eval, 'steps': eval, 'nutrition': eval})
+ingr = data['ingredients']
+>>>>>>> acfb1b62614b79f700a40cd011f0ee99f94d45c3
 #%%
 fridge = []
 
@@ -35,10 +41,15 @@ def Recipes(a=[]):
             for g in ingr[i]:
                 if search(k, g):
                     com.append(k)
+<<<<<<< HEAD
         if len(com) == len(ingr[i]) and len(com) != 0:
             ID.append(data.iloc[:, 1][i])
             print("F", com)
             print("R", ingr[i])
+=======
+        if len(com)==len(ingr[i]) and len(com) != 0:
+            ID.append(data["id"][i])
+>>>>>>> acfb1b62614b79f700a40cd011f0ee99f94d45c3
         com = []
     return ID
 
@@ -104,3 +115,15 @@ for number, name in enumerate(recipe_names[:, 0]):
 choice = int(input("Pick your choice:"))
 
 recipe = recipe_in_detail(choice, recipe_names)
+<<<<<<< HEAD
+=======
+
+def recipe_measurements(recipe):
+    ingr_list = recipe.ingredients()
+    for each in ingr_list:
+        measurement = parser.parse(each)
+        for k in Fridge():
+            if search(k, each):
+                print("Needs",measurement[0].value, measurement[0].unit, "of", k)
+
+>>>>>>> acfb1b62614b79f700a40cd011f0ee99f94d45c3
