@@ -1,2 +1,2 @@
 # Foodetect
-A ML algorithm that detects different types of foods, provides information about them and proposes recipes
+A database that proposes recipes given food from your fridge
