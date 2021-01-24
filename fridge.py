@@ -7,20 +7,17 @@ Created on Sat Jan 23 12:41:51 2021
 """
 
 import numpy as np
-import pandas as pd
 from re import search
 from recipe_scrapers import scrape_me
 import random
 from quantulum3 import parser
 
 
-
-fridge = []
-
 class Fridge:
 
-    def __init__(self, fridge = []):
+    def __init__(self, fridge = [], quantities = {}):
         self._fridge = fridge
+        self._quantities = quantities
 
     def Contents(self):
         return self._fridge
@@ -50,7 +47,7 @@ class Fridge:
 
     def Add(self, a=[]):
         """Add objects to the fridge"""
-        self._fridge = self._fridge.extend(a)
+        self._fridge.extend(a)
         return self._fridge
 
 
@@ -77,3 +74,10 @@ class Fridge:
             for k in Fridge():
                 if search(k, each):
                     print("Needs",measurement[0].value, measurement[0].unit, "of", k)
+            
+    def AssignQuant(self, index=0, value=0):
+        "Assign quantities to the products in the fridge"
+        self._index = self._fridge.index(input("Type of food:"))
+        self._value = input("Quantity of food:")
+        self._quantities[self._fridge[self._index]] = {self._value}
+        return self._quantities
