@@ -18,10 +18,10 @@ from quantulum3 import parser
 fridge = []
 
 class Fridge:
-    
+
     def __init__(self, fridge = []):
         self._fridge = fridge
-    
+
     def Contents(self):
         return self._fridge
 
@@ -35,7 +35,7 @@ class Fridge:
                 for g in ingr[i]:
                     if search(k, g):
                         com.append(k)
-                    
+
             if len(com)==len(ingr[i]) and len(com) != 0:
                 ID.append(ids[i])
             com = []
@@ -77,4 +77,3 @@ class Fridge:
             for k in Fridge():
                 if search(k, each):
                     print("Needs",measurement[0].value, measurement[0].unit, "of", k)
-
