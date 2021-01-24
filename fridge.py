@@ -25,6 +25,7 @@ class Fridge:
 
     def Recipes(self, a=[], ingr=[], ids=[]):
         """Search for recipes that use products from the fridge"""
+        print("Searching your fridge for available recipes:")
         ID = []
         com = []
         for i in range(len(ingr)):
@@ -53,6 +54,7 @@ class Fridge:
 
     def relevant_recipe_names(self, ID):
         """Finds the names of 5 random recipes that have been identified"""
+        print("Finding 5 random recipes you can make out of 230 thousand recipes")
         recipe_names = np.empty((0, 2))
         ID_list = random.sample(ID, min(len(ID), 5))
         for x in ID_list:
@@ -60,47 +62,66 @@ class Fridge:
             recipe_names = np.append(recipe_names, np.array([[scraper.title(), x]]), axis=0)
         return recipe_names
 
-
-    def recipe_in_detail(self, choice, recipe_names):
+    def recipe_choice(self, choice, recipe_names):
         """Work in progress - returns the recipe of choice in more detail"""
         scraper = scrape_me("https://www.food.com/" + str(recipe_names[choice, 1]))
         return scraper
+    
+    def recipe_in_detail(self, recipe):
+        print(recipe.title())
+        print("")
+        print("A recipe that takes {} minutes to make, and yields {}.".format(recipe.total_time(), recipe.yields()))
+        print("")
+        print("{:s}\n{:s}\n".format("Ingredients:", len("Ingredients:") * "-"))
+        print(*recipe.ingredients(), sep = '\n')
+        print("")
+        print("{:s}\n{:s}\n".format("Instructions:", len("Instructions:") * "-"))
+        ins = recipe.instructions()
+        ins = ins.replace('\n', '')
+        ins2 = ins.split('.')
+        for number, ins in enumerate(ins2):
+            print(ins)
+            print("")
+        print("{:s}\n{:s}\n".format("Nutrients:", len("Nutrients:") * "-"))
+        for key in recipe.nutrients():
+            print(key, ':', recipe.nutrients()[key])
 
-
-    def recipe_measurements(self, recipe):
-        ingr_list = recipe.ingredients()
-        for each in ingr_list:
-            measurement = parser.parse(each)
-            for k in self._fridge:
-                if search(k, each):
-                    if measurement[0].unit.name == "pound-mass":
-                        measurement[0].value *= 453
-                        measurement[0].unit = "grams"
-                    elif measurement[0].unit.name == "tablespoon":
-                        measurement[0].value *= 15
-                        measurement[0].unit = "millilitres"
-                    elif measurement[0].unit.name == "teaspoon":
-                        measurement[0].value *= 5
-                        measurement[0].unit = "millilitres"
-                    elif measurement[0].unit.name == "inch":
-                        measurement[0].value *= 2.54
-                        measurement[0].unit = "centimetres"
-                    elif measurement[0].unit.name == "ounce":
-                        measurement[0].value *= 28
-                        measurement[0].unit = "grams"
-                    elif measurement[0].unit.name == "gallon":
-                        measurement[0].value *= 3.7
-                        measurement[0].unit = "litres"
-                    elif measurement[0].unit.name == "quart":
-                        measurement[0].value *= 0.946
-                        measurement[0].unit = "litres"
-                    elif measurement[0].unit.name == "pint":
-                        measurement[0].value *= 0.473
-                        measurement[0].unit = "litres"
-                    elif measurement[0].unit.name == "cup":
-                        measurement[0].value *= 237
-                        measurement[0].unit = "millilitres"
-                    print("Needs",measurement[0].value, measurement[0].unit, "of", k)
+# =============================================================================
+#     def recipe_measurements(self, recipe):
+#         ingr_list = recipe.ingredients()
+#         for each in ingr_list:
+#             measurement = parser.parse(each)
+#             for k in self._fridge:
+#                 if search(k, each):
+#                     if measurement[0].unit.name == "pound-mass":
+#                         measurement[0].value *= 453
+#                         measurement[0].unit = "grams"
+#                     elif measurement[0].unit.name == "tablespoon":
+#                         measurement[0].value *= 15
+#                         measurement[0].unit = "millilitres"
+#                     elif measurement[0].unit.name == "teaspoon":
+#                         measurement[0].value *= 5
+#                         measurement[0].unit = "millilitres"
+#                     elif measurement[0].unit.name == "inch":
+#                         measurement[0].value *= 2.54
+#                         measurement[0].unit = "centimetres"
+#                     elif measurement[0].unit.name == "ounce":
+#                         measurement[0].value *= 28
+#                         measurement[0].unit = "grams"
+#                     elif measurement[0].unit.name == "gallon":
+#                         measurement[0].value *= 3.7
+#                         measurement[0].unit = "litres"
+#                     elif measurement[0].unit.name == "quart":
+#                         measurement[0].value *= 0.946
+#                         measurement[0].unit = "litres"
+#                     elif measurement[0].unit.name == "pint":
+#                         measurement[0].value *= 0.473
+#                         measurement[0].unit = "litres"
+#                     elif measurement[0].unit.name == "cup":
+#                         measurement[0].value *= 237
+#                         measurement[0].unit = "millilitres"
+#                     print("Needs",measurement[0].value, measurement[0].unit, "of", k)
+# =============================================================================
             
     def AssignQuant(self, index=0, value=0):
         "Assign quantities to the products in the fridge"
