@@ -14,9 +14,6 @@ import random
 from quantulum3 import parser
 
 
-
-fridge = []
-
 class Fridge:
 
     def __init__(self, fridge = []):
