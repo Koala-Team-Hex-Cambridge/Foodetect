@@ -14,15 +14,19 @@ import random
 from quantulum3 import parser
 
 
-data = pd.read_csv("RAW_recipes.csv",converters={'ingredients': eval, 'tags': eval, 'steps': eval, 'nutrition': eval})
+
+data = pd.read_csv("RAW_recipes.csv",converters={'ingredients': eval, 'tags': eval, 'steps': eval})
 ingr = data['ingredients']
 #%%
 fridge = []
+
+
 def Fridge():
     return fridge
 
-def Recipes(a = []):
-    '''Search for recipes that use products from the fridge'''
+
+def Recipes(a=[]):
+    """Search for recipes that use products from the fridge"""
     ID = []
     com = []
     for i in range(len(ingr)):
@@ -39,30 +43,37 @@ def Recipes(a = []):
                 else:
                     if search(k,g):
                         com.append(k)
+                if search(k, g):
+                    com.append(k)
+                    
         if len(com)==len(ingr[i]) and len(com) != 0:
             ID.append(data["id"][i])
         com = []
     return ID
-    
-def Remove(a = []):
-    '''Remove used objects from the fridge'''
-    res = list(set(a)^set(Fridge()))
+
+
+def Remove(a=[]):
+    """Remove used objects from the fridge"""
+    res = list(set(a) ^ set(Fridge()))
     return res
-    
-def Add(a = []):
-    '''Add objects to the fridge'''
+
+
+def Add(a=[]):
+    """Add objects to the fridge"""
     fridge = Fridge().extend(a)
     return fridge
 
+
 def relevant_recipe_names(ID):
-    '''Finds the names of 5 random recipes that have been identified'''
-    recipe_names = np.empty((0,2))
+    """Finds the names of 5 random recipes that have been identified"""
+    recipe_names = np.empty((0, 2))
     ID_list = random.sample(ID, min(len(ID), 5))
     for x in ID_list:
         scraper = scrape_me("https://www.food.com/" + str(x))
-        recipe_names = np.append(recipe_names, np.array([[scraper.title(), x]]), axis = 0)
+        recipe_names = np.append(recipe_names, np.array([[scraper.title(), x]]), axis=0)
     return recipe_names
-        
+
+
 def recipe_in_detail(choice, recipe_names):
     '''Returns the recipe of choice in more detail using a scraper'''
     scraper = scrape_me("https://www.food.com/" + str(recipe_names[choice, 1]))
@@ -84,6 +95,7 @@ def recipe_ing(recipe):
 
 Add(['eggs', 'bacon', 'feta', 'milk', 'oil', 'onion', 'sugar', 'ground beef', 'salt', 'butter'])
 Add(['apples', 'bananas', 'pepper', 'marshmallows', 'rice krispies', 'white rice', 'beef gravy'])
+
 ID = Recipes(Fridge())
 recipe_names = relevant_recipe_names(ID)
 for number, name in enumerate(recipe_names[:, 0]):
