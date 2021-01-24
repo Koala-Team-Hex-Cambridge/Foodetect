@@ -47,7 +47,7 @@ class Fridge:
 
     def Add(self, a=[]):
         """Add objects to the fridge"""
-        self._fridge = self._fridge.extend(a)
+        self._fridge.extend(a)
         return self._fridge
 
 
