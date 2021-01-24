@@ -71,8 +71,35 @@ class Fridge:
         ingr_list = recipe.ingredients()
         for each in ingr_list:
             measurement = parser.parse(each)
-            for k in Fridge():
+            for k in self._fridge:
                 if search(k, each):
+                    if measurement[0].unit.name == "pound-mass":
+                        measurement[0].value *= 453
+                        measurement[0].unit = "grams"
+                    elif measurement[0].unit.name == "tablespoon":
+                        measurement[0].value *= 15
+                        measurement[0].unit = "millilitres"
+                    elif measurement[0].unit.name == "teaspoon":
+                        measurement[0].value *= 5
+                        measurement[0].unit = "millilitres"
+                    elif measurement[0].unit.name == "inch":
+                        measurement[0].value *= 2.54
+                        measurement[0].unit = "centimetres"
+                    elif measurement[0].unit.name == "ounce":
+                        measurement[0].value *= 28
+                        measurement[0].unit = "grams"
+                    elif measurement[0].unit.name == "gallon":
+                        measurement[0].value *= 3.7
+                        measurement[0].unit = "litres"
+                    elif measurement[0].unit.name == "quart":
+                        measurement[0].value *= 0.946
+                        measurement[0].unit = "litres"
+                    elif measurement[0].unit.name == "pint":
+                        measurement[0].value *= 0.473
+                        measurement[0].unit = "litres"
+                    elif measurement[0].unit.name == "cup":
+                        measurement[0].value *= 237
+                        measurement[0].unit = "millilitres"
                     print("Needs",measurement[0].value, measurement[0].unit, "of", k)
             
     def AssignQuant(self, index=0, value=0):
