@@ -1,5 +1,5 @@
 import re
-from emailScanner import emailFinder
+from emailScanner import FileLocation
 
 # will change this to store user information as part of profile
 # account credentials
@@ -17,9 +17,9 @@ class UserProfile:
         return self.password
 
 
-userTest = UserProfile("ahhas", "hahsa@gmail.com")
+userTest = UserProfile("testName", "testName@gmail.com")
 
-emailFinder(
+FileLocation(
     getattr(userTest, "emailAddress"),
     getattr(userTest, "emailProvider"),
     getattr(userTest, "password"),
