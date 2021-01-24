@@ -36,11 +36,13 @@ class Fridge:
 num = 1
 
 with open('test.txt', 'r') as f:
+   
     content = f.readline(num)
-
-while len(content) > 0:
-    food1 = Food("content", 1)
-    num += 1
+   
+    while len(content) > 0:
+        content = f.readline(num)
+        food1 = Food("content", 1)
+        num += 1
 
 
 
