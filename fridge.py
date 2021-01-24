@@ -28,8 +28,17 @@ def Recipes(a = []):
     for i in range(len(ingr)):
         for k in a:
             for g in ingr[i]:
-                if search(k,g):
-                    com.append(k)
+                #simplistic check whether or not e.g. 'salt & pepper' exists
+                #if there is, split these two apart
+                if any(et in g for et in ["&"]):
+                    g = g.rsplit('&')
+                if isinstance(g, list):
+                    for j in g:
+                        if search(k,j):
+                            com.append(k)
+                else:
+                    if search(k,g):
+                        com.append(k)
         if len(com)==len(ingr[i]) and len(com) != 0:
             ID.append(data["id"][i])
         com = []
@@ -55,9 +64,23 @@ def relevant_recipe_names(ID):
     return recipe_names
         
 def recipe_in_detail(choice, recipe_names):
-    '''Work in progress - returns the recipe of choice in more detail'''
+    '''Returns the recipe of choice in more detail using a scraper'''
     scraper = scrape_me("https://www.food.com/" + str(recipe_names[choice, 1]))
     return scraper
+
+def recipe_ing(recipe):
+    'gets a readout of the ingredients needed. work in progress'
+    ingr_list = recipe.ingredients()
+    for each in ingr_list:
+        measurement = parser.parse(each)
+        for k in Fridge():
+            if search(k, each):
+                if len(measurement) != 0:
+                    st = each.replace(measurement[0].surface, "")
+                    print("Needs",measurement[0].value, measurement[0].unit, "of", st)
+                else:
+                    print("Needs", st)
+
 
 Add(['eggs', 'bacon', 'feta', 'milk', 'oil', 'onion', 'sugar', 'ground beef', 'salt', 'butter'])
 Add(['apples', 'bananas', 'pepper', 'marshmallows', 'rice krispies', 'white rice', 'beef gravy'])
@@ -69,12 +92,4 @@ for number, name in enumerate(recipe_names[:, 0]):
 choice = int(input("Pick your choice:"))
 
 recipe = recipe_in_detail(choice, recipe_names)
-
-def recipe_measurements(recipe):
-    ingr_list = recipe.ingredients()
-    for each in ingr_list:
-        measurement = parser.parse(each)
-        for k in Fridge():
-            if search(k, each):
-                print("Needs",measurement[0].value, measurement[0].unit, "of", k)
-
+recipe_ing(recipe)
