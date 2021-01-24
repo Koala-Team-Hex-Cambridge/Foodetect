@@ -10,7 +10,7 @@ Created on Sun Jan 24 05:50:59 2021
 import pandas as pd
 from fridge import Fridge
 
-data = pd.read_csv("RAW_recipes.csv",converters={'ingredients': eval, 'tags': eval, 'steps': eval})
+data = pd.read_csv("RAW_recipes_updated.csv",converters={'ingredients': eval, 'tags': eval, 'steps': eval})
 ingr = data['ingredients']
 ids = data['id']
 
